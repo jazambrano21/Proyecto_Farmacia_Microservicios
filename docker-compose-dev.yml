@@ -1,0 +1,186 @@
+version: '3.8'
+
+services:
+  # Base de datos para Catalog-Service
+  catalog-db:
+    image: mysql:8.0
+    container_name: catalog-db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${CATALOG_DB_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${CATALOG_DB_NAME:-catalog_db}
+    ports:
+      - "${CATALOG_DB_PORT:-3308}:3306"
+    volumes:
+      - catalog_db_data:/var/lib/mysql
+    networks:
+      - farmacia-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Base de datos para Customer-Service
+  customer-db:
+    image: mysql:8.0
+    container_name: customer-db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${CUSTOMER_DB_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${CUSTOMER_DB_NAME:-customer_db}
+    ports:
+      - "${CUSTOMER_DB_PORT:-3309}:3306"
+    volumes:
+      - customer_db_data:/var/lib/mysql
+    networks:
+      - farmacia-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Base de datos para Inventory-Service
+  inventory-db:
+    image: mysql:8.0
+    container_name: inventory-db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${INVENTORY_DB_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${INVENTORY_DB_NAME:-inventory_db}
+    ports:
+      - "${INVENTORY_DB_PORT:-3310}:3306"
+    volumes:
+      - inventory_db_data:/var/lib/mysql
+    networks:
+      - farmacia-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Base de datos para Sales-Service
+  sales-db:
+    image: mysql:8.0
+    container_name: sales-db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${SALES_DB_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${SALES_DB_NAME:-sales_db}
+    ports:
+      - "${SALES_DB_PORT:-3311}:3306"
+    volumes:
+      - sales_db_data:/var/lib/mysql
+    networks:
+      - farmacia-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Catalog-Service (construcción local para desarrollo)
+  catalog-service:
+    build:
+      context: ./Catalog-Service
+      dockerfile: Dockerfile
+    container_name: catalog-service
+    ports:
+      - "${CATALOG_SERVICE_PORT:-8081}:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://catalog-db:3306/${CATALOG_DB_NAME:-catalog_db}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${CATALOG_DB_ROOT_PASSWORD:-rootpassword}
+    depends_on:
+      catalog-db:
+        condition: service_healthy
+    networks:
+      - farmacia-network
+    restart: unless-stopped
+
+  # Customer-Service (construcción local para desarrollo)
+  customer-service:
+    build:
+      context: ./Customer-Service
+      dockerfile: Dockerfile
+    container_name: customer-service
+    ports:
+      - "${CUSTOMER_SERVICE_PORT:-8082}:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://customer-db:3306/${CUSTOMER_DB_NAME:-customer_db}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${CUSTOMER_DB_ROOT_PASSWORD:-rootpassword}
+    depends_on:
+      customer-db:
+        condition: service_healthy
+    networks:
+      - farmacia-network
+    restart: unless-stopped
+
+  # Inventory-Service (construcción local para desarrollo)
+  inventory-service:
+    build:
+      context: ./Inventory-Service
+      dockerfile: Dockerfile
+    container_name: inventory-service
+    ports:
+      - "${INVENTORY_SERVICE_PORT:-8083}:8083"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://inventory-db:3306/${INVENTORY_DB_NAME:-inventory_db}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${INVENTORY_DB_ROOT_PASSWORD:-rootpassword}
+    depends_on:
+      inventory-db:
+        condition: service_healthy
+    networks:
+      - farmacia-network
+    restart: unless-stopped
+
+  # Sales-Service (construcción local para desarrollo)
+  sales-service:
+    build:
+      context: ./Sales-Service
+      dockerfile: Dockerfile
+    container_name: sales-service
+    ports:
+      - "${SALES_SERVICE_PORT:-8084}:8084"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://sales-db:3306/${SALES_DB_NAME:-sales_db}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${SALES_DB_ROOT_PASSWORD:-rootpassword}
+    depends_on:
+      sales-db:
+        condition: service_healthy
+    networks:
+      - farmacia-network
+    restart: unless-stopped
+
+  # Reports-Service (construcción local para desarrollo)
+  reports-service:
+    build:
+      context: ./Reports-Service
+      dockerfile: Dockerfile
+    container_name: reports-service
+    ports:
+      - "${REPORTS_SERVICE_PORT:-8085}:8085"
+    environment:
+      SERVICES_CATALOG_URL: ${CATALOG_SERVICE_URL:-http://catalog-service:8081}
+      SERVICES_CUSTOMER_URL: ${CUSTOMER_SERVICE_URL:-http://customer-service:8082}
+      SERVICES_INVENTORY_URL: ${INVENTORY_SERVICE_URL:-http://inventory-service:8083}
+      SERVICES_SALES_URL: ${SALES_SERVICE_URL:-http://sales-service:8084}
+    depends_on:
+      - catalog-service
+      - customer-service
+      - inventory-service
+      - sales-service
+    networks:
+      - farmacia-network
+    restart: unless-stopped
+
+volumes:
+  catalog_db_data:
+  customer_db_data:
+  inventory_db_data:
+  sales_db_data:
+
+networks:
+  farmacia-network:
+    driver: bridge

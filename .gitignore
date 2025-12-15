@@ -1,0 +1,37 @@
+# Variables de entorno
+.env
+
+# Archivos de build
+**/build/
+**/.gradle/
+**/target/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Docker
+docker-compose.override.yml
+
+# Archivos temporales
+*.tmp
+*.bak
+*.swp
+*~
+
+# Documentación y guías
+*.md
+!README.md
+
+# Scripts de Docker Hub
+subir-docker-hub.*
+
+
