@@ -86,7 +86,7 @@ services:
     ports:
       - "${CATALOG_SERVICE_PORT:-8081}:8081"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://catalog-db:3306/${CATALOG_DB_NAME:-catalog_db}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_URL: jdbc:mysql://catalog-db:3306/${CATALOG_DB_NAME:-catalog_db}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: ${CATALOG_DB_ROOT_PASSWORD:-rootpassword}
     depends_on:
@@ -105,7 +105,7 @@ services:
     ports:
       - "${CUSTOMER_SERVICE_PORT:-8082}:8082"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://customer-db:3306/${CUSTOMER_DB_NAME:-customer_db}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_URL: jdbc:mysql://customer-db:3306/${CUSTOMER_DB_NAME:-customer_db}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: ${CUSTOMER_DB_ROOT_PASSWORD:-rootpassword}
     depends_on:
@@ -124,7 +124,7 @@ services:
     ports:
       - "${INVENTORY_SERVICE_PORT:-8083}:8083"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://inventory-db:3306/${INVENTORY_DB_NAME:-inventory_db}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_URL: jdbc:mysql://inventory-db:3306/${INVENTORY_DB_NAME:-inventory_db}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: ${INVENTORY_DB_ROOT_PASSWORD:-rootpassword}
     depends_on:
@@ -143,7 +143,7 @@ services:
     ports:
       - "${SALES_SERVICE_PORT:-8084}:8084"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://sales-db:3306/${SALES_DB_NAME:-sales_db}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_URL: jdbc:mysql://sales-db:3306/${SALES_DB_NAME:-sales_db}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: ${SALES_DB_ROOT_PASSWORD:-rootpassword}
     depends_on:

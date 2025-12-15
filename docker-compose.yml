@@ -79,12 +79,12 @@ services:
 
   # Catalog-Service
   catalog-service:
-    image: jazambrano21/farmacia-catalog-service:1.0.0
+    image: jazambrano21/farmacia-catalog-service:1.0.1
     container_name: catalog-service
     ports:
       - "${CATALOG_SERVICE_PORT:-8081}:8081"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://catalog-db:3306/${CATALOG_DB_NAME:-catalog_db}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_URL: jdbc:mysql://catalog-db:3306/${CATALOG_DB_NAME:-catalog_db}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: ${CATALOG_DB_ROOT_PASSWORD:-rootpassword}
     depends_on:
@@ -96,12 +96,12 @@ services:
 
   # Customer-Service
   customer-service:
-    image: jazambrano21/farmacia-customer-service:1.0.0
+    image: jazambrano21/farmacia-customer-service:1.0.1
     container_name: customer-service
     ports:
       - "${CUSTOMER_SERVICE_PORT:-8082}:8082"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://customer-db:3306/${CUSTOMER_DB_NAME:-customer_db}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_URL: jdbc:mysql://customer-db:3306/${CUSTOMER_DB_NAME:-customer_db}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: ${CUSTOMER_DB_ROOT_PASSWORD:-rootpassword}
     depends_on:
@@ -113,12 +113,12 @@ services:
 
   # Inventory-Service
   inventory-service:
-    image: jazambrano21/farmacia-inventory-service:1.0.0
+    image: jazambrano21/farmacia-inventory-service:1.0.1
     container_name: inventory-service
     ports:
       - "${INVENTORY_SERVICE_PORT:-8083}:8083"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://inventory-db:3306/${INVENTORY_DB_NAME:-inventory_db}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_URL: jdbc:mysql://inventory-db:3306/${INVENTORY_DB_NAME:-inventory_db}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: ${INVENTORY_DB_ROOT_PASSWORD:-rootpassword}
     depends_on:
@@ -130,12 +130,12 @@ services:
 
   # Sales-Service
   sales-service:
-    image: jazambrano21/farmacia-sales-service:1.0.0
+    image: jazambrano21/farmacia-sales-service:1.0.1
     container_name: sales-service
     ports:
       - "${SALES_SERVICE_PORT:-8084}:8084"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://sales-db:3306/${SALES_DB_NAME:-sales_db}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_URL: jdbc:mysql://sales-db:3306/${SALES_DB_NAME:-sales_db}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: ${SALES_DB_ROOT_PASSWORD:-rootpassword}
     depends_on:
@@ -147,7 +147,7 @@ services:
 
   # Reports-Service
   reports-service:
-    image: jazambrano21/farmacia-reports-service:1.0.0
+    image: jazambrano21/farmacia-reports-service:1.0.1
     container_name: reports-service
     ports:
       - "${REPORTS_SERVICE_PORT:-8085}:8085"
