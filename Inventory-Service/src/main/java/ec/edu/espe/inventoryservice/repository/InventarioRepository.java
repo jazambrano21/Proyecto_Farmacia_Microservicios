@@ -26,3 +26,7 @@ public interface InventarioRepository extends JpaRepository<Inventario, Long> {
 }
 
 
+
+
+
+

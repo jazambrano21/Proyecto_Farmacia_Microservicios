@@ -24,3 +24,7 @@ public interface PrescripcionRepository extends JpaRepository<Prescripcion, Long
 }
 
 
+
+
+
+

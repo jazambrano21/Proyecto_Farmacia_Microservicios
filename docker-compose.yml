@@ -147,7 +147,7 @@ services:
 
   # Reports-Service
   reports-service:
-    image: jazambrano21/farmacia-reports-service:1.0.1
+    image: jazambrano21/farmacia-reports-service:1.0.2
     container_name: reports-service
     ports:
       - "${REPORTS_SERVICE_PORT:-8085}:8085"
@@ -161,6 +161,22 @@ services:
       - customer-service
       - inventory-service
       - sales-service
+    networks:
+      - farmacia-network
+    restart: unless-stopped
+
+  # Gateway-Service
+  gateway-service:
+    image: jazambrano21/farmacia-gateway-service:1.0.0
+    container_name: gateway-service
+    ports:
+      - "${GATEWAY_SERVICE_PORT:-80}:80"
+    depends_on:
+      - catalog-service
+      - customer-service
+      - inventory-service
+      - sales-service
+      - reports-service
     networks:
       - farmacia-network
     restart: unless-stopped

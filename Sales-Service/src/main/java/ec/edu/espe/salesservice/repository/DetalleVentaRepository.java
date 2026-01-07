@@ -15,3 +15,7 @@ public interface DetalleVentaRepository extends JpaRepository<DetalleVenta, Long
 }
 
 
+
+
+
+
